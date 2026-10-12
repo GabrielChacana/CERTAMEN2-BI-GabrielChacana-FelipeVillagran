@@ -1,0 +1,87 @@
+-- ============================================================
+-- PROYECTO: KentFoods Data Warehouse (Fase 1)
+-- AUTOR: Felipe Villagran & Gabriel Chacana
+-- OBJETIVO: Creacion del Modelo Dimensional en Estrella
+-- ============================================================
+
+-- Crear Base de Datos Dimensional
+CREATE DATABASE KentFoods_DW;
+GO
+
+USE KentFoods_DW;
+GO
+
+-- 1. Dimension Cliente
+CREATE TABLE DimCliente (
+    ClienteKey INT IDENTITY(1,1) PRIMARY KEY,
+    ClienteID NVARCHAR(5) NOT NULL,
+    Empresa NVARCHAR(40) NOT NULL,
+    Contacto NVARCHAR(30),
+    Cargo NVARCHAR(30),
+    Ciudad NVARCHAR(15),
+    Pais NVARCHAR(15)
+);
+
+-- 2. Dimension Producto (Desnormalizada con Categoria y Proveedor)
+CREATE TABLE DimProducto (
+    ProductoKey INT IDENTITY(1,1) PRIMARY KEY,
+    ProductoID INT NOT NULL,
+    Producto NVARCHAR(40) NOT NULL,
+    Categoria NVARCHAR(15),
+    Proveedor NVARCHAR(40),
+    CantidadPorUnidad NVARCHAR(20),
+    PrecioUnitario DECIMAL(18,2)
+);
+
+-- 3. Dimension Empleado
+CREATE TABLE DimEmpleado (
+    EmpleadoKey INT IDENTITY(1,1) PRIMARY KEY,
+    EmpleadoID INT NOT NULL,
+    NombreCompleto NVARCHAR(50) NOT NULL,
+    Cargo NVARCHAR(30),
+    Ciudad NVARCHAR(15),
+    Pais NVARCHAR(15)
+);
+
+-- 4. Dimension Transportista
+CREATE TABLE DimTransportista (
+    TransportistaKey INT IDENTITY(1,1) PRIMARY KEY,
+    TransportistaID INT NOT NULL,
+    Transportista NVARCHAR(40) NOT NULL,
+    Telefono NVARCHAR(24)
+);
+
+-- 5. Dimension Tiempo
+CREATE TABLE DimTiempo (
+    FechaKey INT PRIMARY KEY, -- Formato AAAAMMDD (Ej: 20261011)
+    Fecha DATE NOT NULL,
+    Anio INT NOT NULL,
+    Semestre INT NOT NULL,
+    Trimestre INT NOT NULL,
+    Mes INT NOT NULL,
+    NombreMes NVARCHAR(15) NOT NULL,
+    Dia INT NOT NULL
+);
+
+-- 6. Tabla de Hechos: FactVentas
+CREATE TABLE FactVentas (
+    VentasKey BIGINT IDENTITY(1,1) PRIMARY KEY,
+    OrdenID INT NOT NULL,
+    
+    -- Claves Foraneas / Sustitutas hacia las Dimensiones
+    ClienteKey INT NOT NULL FOREIGN KEY REFERENCES DimCliente(ClienteKey),
+    ProductoKey INT NOT NULL FOREIGN KEY REFERENCES DimProducto(ProductoKey),
+    EmpleadoKey INT NOT NULL FOREIGN KEY REFERENCES DimEmpleado(EmpleadoKey),
+    TransportistaKey INT NOT NULL FOREIGN KEY REFERENCES DimTransportista(TransportistaKey),
+    FechaOrdenKey INT NOT NULL FOREIGN KEY REFERENCES DimTiempo(FechaKey),
+    FechaEnvioKey INT NULL FOREIGN KEY REFERENCES DimTiempo(FechaKey),
+    
+    -- Medidas
+    PrecioUnitario DECIMAL(18,2) NOT NULL,
+    Cantidad SMALLINT NOT NULL,
+    Descuento REAL NOT NULL,
+    MontoVenta DECIMAL(18,2) NOT NULL,       -- Cantidad * PrecioUnitario
+    MontoConDescuento DECIMAL(18,2) NOT NULL, -- Cantidad * PrecioUnitario * (1 - Descuento)
+    DiasDeEnvio INT NULL                     -- FechaEnvio - FechaOrden
+);
+GO
