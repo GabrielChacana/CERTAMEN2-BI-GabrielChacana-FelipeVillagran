@@ -38,6 +38,9 @@ Una línea de producto por cada orden de compra generada (nivel más atómico ba
 - **Tabla:** FactVentas
 - **Medidas:** Cantidad, PrecioUnitario, Descuento, MontoVenta (medida calculada), MontoConDescuento (medida calculada), DiasDeEnvio (medida calculada).
 
+### 5. Diagrama dimensional
+- Para ver el diagrama del modelo, vea el siguiente link: https://github.com/GabrielChacana/CERTAMEN2-BI-GabrielChacana-FelipeVillagran/blob/main/docs/modelo-dimensional/Modelo%20dimensional.png
+
 ## Proceso ETL Fase 1
 *(Se completará durante el desarrollo en SSIS)*
 
