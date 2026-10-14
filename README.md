@@ -9,48 +9,76 @@ Caso 3: KentFoods
 - Paralelo 300
 
 ## Descripción del problema
-KentFoods es una empresa de venta de alimentos por envios, que ha logrado un rápido crecimiento durante los últimos años. Debido a esto, el propietario necesita incorporar Inteligencia de Negocios, con la intención de apoyar la toma de decisiones, permitiendo a los encargados seguir un buen camino estratégico.
+KentFoods es una empresa de venta de alimentos por envíos que ha experimentado un rápido crecimiento durante los últimos años. Debido a esto, la administración requiere incorporar Inteligencia de Negocios para apoyar la toma de decisiones estratégicas mediante el análisis consolidado de sus datos operacionales.
 
 ## Objetivo del proyecto
-Desarrollar una propuesta integral de Inteligencia de Negocios que permita analizar los datos de ventas, clientes, empleados y envíos, facilitando en gran parte el proceso de la toma de decisiones del dueño mediante un modelo dimensional y procesos ETL.
+Desarrollar una solución integral de Inteligencia de Negocios que permita centralizar y analizar datos de ventas, clientes, empleados, productos y despachos, facilitando el proceso de toma de decisiones a través de un modelo dimensional en estrella (Star Schema) y procesos de extracción, transformación y carga (ETL).
 
 ## KPI definidos
-1. **Ingresos Totales por Ventas:** Permite evaluar el estado financiero del negocio midiendo el monto real generado en las transacciones, considerando el precio unitario, la cantidad y los descuentos aplicados.  
-  **Ingresos Totales** = (Cantidad x PrecioUnitario x (1-Descuento)).
-2. **Cantidad Total de Productos Vendidos:** Mide el volumen de movimiento de inventario para identificar los productos de mayor demanda y rotación, apoyando la gestión de abastecimiento.
-3. **Promedio de Días de Envío:** Evalúa la eficiencia logística y de despacho midiendo el tiempo promedio transcurrido entre la generación de la orden de compra y su envío efectivo.
+1. **Ingresos Totales por Ventas:** Evalúa el desempeño financiero del negocio midiendo el monto real neto generado en las transacciones.  
+   $$\text{MontoConDescuento} = \text{Cantidad} \times \text{PrecioUnitario} \times (1 - \text{Descuento})$$
+2. **Cantidad Total de Productos Vendidos:** Mide el volumen de movimiento de inventario para identificar productos con mayor rotación y apoyar la gestión de abastecimiento.
+3. **Promedio de Días de Envío:** Mide la eficiencia logística evaluando el tiempo promedio transcurrido entre la fecha de generación de la orden y su despacho efectivo ($\text{FechaEnvio} - \text{FechaOrden}$).
 
-## Modelo dimensional
-### 1. Proceso de negocio
+---
+
+## Modelo Dimensional
+
+### 1. Proceso de Negocio
 Gestión de Ventas y Despacho de Pedidos.
 
 ### 2. Granularidad
-Una línea de producto por cada orden de compra generada (nivel más atómico basado en el detalle de la orden).
+Un registro en la tabla de hechos `FactVentas` representa **una línea individual de detalle de una orden de compra** (nivel de detalle más atómico basado en el ítem de la orden: `OrdenID` + `ProductoID`).
 
 ### 3. Dimensiones
-- **DimTiempo:** Para analizar ventas por fecha de orden y fecha de envío.
-- **DimCliente:** Datos descriptivos del cliente como: su empresa, contacto, ciudad, Pais.
-- **DimProducto:** Información del producto, categoría y su respectivo proveedor.
-- **DimEmpleado:** Información del trabajador que gestionó la venta y su territorio/región.
-- **DimTransportista:** Datos de la empresa a cargo del envío.
+- **`DimTiempo`**: Permite analizar las ventas por fecha de orden y fecha de envío (Año, Semestre, Trimestre, Mes, Nombre de Mes, Día).
+- **`DimCliente`**: Datos descriptivos del cliente (`ClienteID`, Empresa, Contacto, Cargo, Ciudad, País).
+- **`DimProducto`**: Información desnormalizada del producto (`ProductoID`, Nombre, Categoría, Proveedor, Cantidad por Unidad, Precio Unitario).
+- **`DimEmpleado`**: Información del trabajador que gestionó la venta (`EmpleadoID`, Nombre Completo, Cargo, Ciudad, País).
+- **`DimTransportista`**: Datos de la empresa de transporte a cargo del despacho (`TransportistaID`, Nombre, Teléfono).
 
-### 4. Tabla de hechos y medidas
-- **Tabla:** FactVentas
-- **Medidas:** Cantidad, PrecioUnitario, Descuento, MontoVenta (medida calculada), MontoConDescuento (medida calculada), DiasDeEnvio (medida calculada).
+### 4. Tabla de Hechos y Medidas
+- **Tabla:** `FactVentas`
+- **Claves:** `ClienteKey`, `ProductoKey`, `EmpleadoKey`, `TransportistaKey`, `FechaOrdenKey`, `FechaEnvioKey`.
+- **Medidas:** `PrecioUnitario`, `Cantidad`, `Descuento`, `MontoVenta` (calculada: Cantidad $\times$ PrecioUnitario), `MontoConDescuento` (calculada: Cantidad $\times$ PrecioUnitario $\times$ (1 - Descuento)), `DiasDeEnvio` (calculada: FechaEnvio - FechaOrden).
 
-### 5. Diagrama dimensional
-- Para ver el diagrama del modelo, vea el siguiente link: https://github.com/GabrielChacana/CERTAMEN2-BI-GabrielChacana-FelipeVillagran/blob/main/docs/modelo-dimensional/Modelo%20dimensional.png
+### 5. Diagrama Dimensional
+El diagrama del modelo en estrella se encuentra disponible en:  
+[Ver Diagrama Modelo Dimensional](docs/modelo-dimensional/Modelo%20dimensional.png)
 
-## Proceso ETL Fase 1
-*(Se completará durante el desarrollo en SSIS)*
+---
 
-## Estructura del repositorio
-- `docs/`: Documentación del modelo dimensional y presentaciones.
-- `database/`: Scripts SQL de creación del modelo y archivos de backup `.bak`.
-- `etl/`: Proyecto de Integration Services (SSIS).
-- `olap/`: Proyecto de Analysis Services (SSAS).
-- `powerbi/`: Archivo del dashboard `.pbix`.
+## Proceso ETL - Fase 1
+El proceso de extracción, transformación y carga se implementó mediante **SQL Server Integration Services (SSIS)** dividiéndose en 6 paquetes independientes (`.dtsx`):
+1. **`01_DimCliente.dtsx`**: Extracción e inserción de la dimensión cliente con clave sustituta.
+2. **`02_DimEmpleado.dtsx`**: Concatenación de nombre y apellido, e inserción en la dimensión empleado.
+3. **`03_DimProducto.dtsx`**: Desnormalización (JOIN entre Productos, Categorías y Proveedores) para construir la dimensión producto.
+4. **`04_DimTiempo.dtsx`**: Carga de la dimensión de tiempo (cobertura 1996 - 1998) generando claves sustitutas en formato `AAAAMMDD`.
+5. **`05_DimTransportista.dtsx`**: Carga de la dimensión transportista.
+6. **`06_FactVentas.dtsx`**: Carga de la tabla de hechos relacionando las claves del negocio con las claves sustitutas (`Keys`), calculando las métricas de negocio (`MontoVenta`, `MontoConDescuento`, `DiasDeEnvio`) y gestionando valores nulos para pedidos no enviados.
 
-## Instrucciones de ejecución/revisión
-*(Se agregarán las instrucciones para ejecutar los scripts y proyectos)*
+---
 
+## Estructura del Repositorio
+- `database/`: Script DDL de creación del Data Warehouse (`01_Create_KentFoods_DW.sql`), script de pruebas y validación (`02_Verificaciones_DW.sql`), y archivo de copia de seguridad (`KentFoods_DW.bak`).
+- `docs/`: Documentación del modelo dimensional e imágenes.
+- `etl/`: Solución de Visual Studio / SSIS con los paquetes ETL (`.dtsx`).
+- `olap/`: Proyecto de Analysis Services (SSAS) - *Fase 2*.
+- `powerbi/`: Reporte y Dashboard en Power BI (`.pbix`) - *Fase 3*.
+
+---
+
+## Instrucciones de Ejecución y Revisión
+
+### Opción A: Restauración directa desde Backup (.bak)
+1. Abrir **SQL Server Management Studio (SSMS)**.
+2. Hacer clic derecho en **Databases** $\rightarrow$ **Restore Database...**
+3. Seleccionar **Device** y examinar hasta el archivo `database/KentFoods_DW.bak`.
+4. Ejecutar la restauración para obtener el Data Warehouse con la estructura y los 2,155 registros cargados.
+
+### Opción B: Reconstrucción mediante Scripts y SSIS
+1. Ejecutar el script `database/01_Create_KentFoods_DW.sql` en SQL Server para crear la base de datos `KentFoods_DW` vacía.
+2. Abrir la solución SSIS situada en `etl/ETL_KentFoods.slnx` con Visual Studio.
+3. Configurar las cadenas de conexión OLE DB hacia la base origen `KentFoods` y destino `KentFoods_DW`.
+4. Ejecutar los 6 paquetes ETL en orden numérico (`01_DimCliente.dtsx` a `06_FactVentas.dtsx`).
+5. Ejecutar el script `database/02_Verificaciones_DW.sql` para comprobar la integridad referencial y las consultas analíticas.
