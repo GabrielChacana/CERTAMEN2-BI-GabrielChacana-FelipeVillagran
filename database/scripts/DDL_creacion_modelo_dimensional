@@ -1,17 +1,27 @@
 -- ============================================================
 -- PROYECTO: KentFoods Data Warehouse (Fase 1)
--- AUTOR: Felipe Villagran & Gabriel Chacana
--- OBJETIVO: Creacion del Modelo Dimensional en Estrella
+-- AUTORES: Felipe Villagran & Gabriel Chacana
+-- OBJETIVO: Creación del Modelo Dimensional en Estrella (Star Schema)
 -- ============================================================
 
--- Crear Base de Datos Dimensional
+USE master;
+GO
+
+-- Recrear la base de datos si ya existe
+IF EXISTS (SELECT name FROM sys.databases WHERE name = 'KentFoods_DW')
+BEGIN
+    ALTER DATABASE KentFoods_DW SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE KentFoods_DW;
+END
+GO
+
 CREATE DATABASE KentFoods_DW;
 GO
 
 USE KentFoods_DW;
 GO
 
--- 1. Dimension Cliente
+-- 1. Dimensión Cliente
 CREATE TABLE DimCliente (
     ClienteKey INT IDENTITY(1,1) PRIMARY KEY,
     ClienteID NVARCHAR(5) NOT NULL,
@@ -22,7 +32,7 @@ CREATE TABLE DimCliente (
     Pais NVARCHAR(15)
 );
 
--- 2. Dimension Producto (Desnormalizada con Categoria y Proveedor)
+-- 2. Dimensión Producto (Desnormalizada con Categoría y Proveedor)
 CREATE TABLE DimProducto (
     ProductoKey INT IDENTITY(1,1) PRIMARY KEY,
     ProductoID INT NOT NULL,
@@ -33,7 +43,7 @@ CREATE TABLE DimProducto (
     PrecioUnitario DECIMAL(18,2)
 );
 
--- 3. Dimension Empleado
+-- 3. Dimensión Empleado
 CREATE TABLE DimEmpleado (
     EmpleadoKey INT IDENTITY(1,1) PRIMARY KEY,
     EmpleadoID INT NOT NULL,
@@ -43,7 +53,7 @@ CREATE TABLE DimEmpleado (
     Pais NVARCHAR(15)
 );
 
--- 4. Dimension Transportista
+-- 4. Dimensión Transportista
 CREATE TABLE DimTransportista (
     TransportistaKey INT IDENTITY(1,1) PRIMARY KEY,
     TransportistaID INT NOT NULL,
@@ -51,7 +61,7 @@ CREATE TABLE DimTransportista (
     Telefono NVARCHAR(24)
 );
 
--- 5. Dimension Tiempo
+-- 5. Dimensión Tiempo
 CREATE TABLE DimTiempo (
     FechaKey INT PRIMARY KEY, -- Formato AAAAMMDD (Ej: 20261011)
     Fecha DATE NOT NULL,
@@ -68,7 +78,7 @@ CREATE TABLE FactVentas (
     VentasKey BIGINT IDENTITY(1,1) PRIMARY KEY,
     OrdenID INT NOT NULL,
     
-    -- Claves Foraneas / Sustitutas hacia las Dimensiones
+    -- Claves Foráneas / Sustitutas hacia las Dimensiones
     ClienteKey INT NOT NULL FOREIGN KEY REFERENCES DimCliente(ClienteKey),
     ProductoKey INT NOT NULL FOREIGN KEY REFERENCES DimProducto(ProductoKey),
     EmpleadoKey INT NOT NULL FOREIGN KEY REFERENCES DimEmpleado(EmpleadoKey),
@@ -82,6 +92,6 @@ CREATE TABLE FactVentas (
     Descuento REAL NOT NULL,
     MontoVenta DECIMAL(18,2) NOT NULL,       -- Cantidad * PrecioUnitario
     MontoConDescuento DECIMAL(18,2) NOT NULL, -- Cantidad * PrecioUnitario * (1 - Descuento)
-    DiasDeEnvio INT NULL                     -- FechaEnvio - FechaOrden
+    DiasDeEnvio INT NULL                      -- FechaEnvio - FechaOrden
 );
 GO
