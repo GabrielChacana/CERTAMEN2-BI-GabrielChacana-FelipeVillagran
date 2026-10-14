@@ -1,0 +1,79 @@
+USE KentFoods_DW;
+GO
+
+-- 1. CONTEO GENERAL DE REGISTROS POR TABLA
+PRINT '1. Conteo general de filas por tabla en KentFoods_DW:';
+SELECT 'DimCliente' AS Tabla, COUNT(*) AS TotalRegistros FROM dbo.DimCliente
+UNION ALL
+SELECT 'DimProducto', COUNT(*) FROM dbo.DimProducto
+UNION ALL
+SELECT 'DimEmpleado', COUNT(*) FROM dbo.DimEmpleado
+UNION ALL
+SELECT 'DimTransportista', COUNT(*) FROM dbo.DimTransportista
+UNION ALL
+SELECT 'DimTiempo', COUNT(*) FROM dbo.DimTiempo
+UNION ALL
+SELECT 'FactVentas', COUNT(*) FROM dbo.FactVentas;
+GO
+
+-- 2. VALIDACIÓN DE INTEGRIDAD DE CLAVES
+PRINT '2. Verificación de integridad referencial (no deben existir huérfanos):';
+
+SELECT COUNT(*) AS VentasSinCliente 
+FROM dbo.FactVentas f
+LEFT JOIN dbo.DimCliente c ON f.ClienteKey = c.ClienteKey
+WHERE c.ClienteKey IS NULL;
+
+SELECT COUNT(*) AS VentasSinProducto 
+FROM dbo.FactVentas f
+LEFT JOIN dbo.DimProducto p ON f.ProductoKey = p.ProductoKey
+WHERE p.ProductoKey IS NULL;
+
+SELECT COUNT(*) AS VentasSinFechaOrden 
+FROM dbo.FactVentas f
+LEFT JOIN dbo.DimTiempo t ON f.FechaOrdenKey = t.FechaKey
+WHERE t.FechaKey IS NULL;
+GO
+
+-- 3. CONSULTA ANALÍTICA 1: Ventas acumuladas por Año y Mes
+PRINT '3. Ventas por Año y Mes:';
+SELECT 
+    t.Anio,
+    t.Mes,
+    t.NombreMes,
+    COUNT(DISTINCT f.OrdenID) AS CantidadOrdenes,
+    SUM(f.Cantidad) AS UnidadesVendidas,
+    SUM(f.MontoVenta) AS VentaBrutaTotal,
+    SUM(f.MontoConDescuento) AS VentaNetaTotal
+FROM dbo.FactVentas f
+INNER JOIN dbo.DimTiempo t ON f.FechaOrdenKey = t.FechaKey
+GROUP BY t.Anio, t.Mes, t.NombreMes
+ORDER BY t.Anio, t.Mes;
+GO
+
+-- 4. CONSULTA ANALÍTICA 2: Top 5 Clientes
+PRINT '4. Top 5 Clientes por Monto Total Neto Comprado:';
+SELECT TOP 5
+    c.ClienteID,
+    c.Empresa,
+    c.Contacto,
+    c.Pais,
+    SUM(f.MontoConDescuento) AS TotalComprado
+FROM dbo.FactVentas f
+INNER JOIN dbo.DimCliente c ON f.ClienteKey = c.ClienteKey
+GROUP BY c.ClienteID, c.Empresa, c.Contacto, c.Pais
+ORDER BY TotalComprado DESC;
+GO
+
+-- 5. CONSULTA ANALÍTICA 3: Ventas por Categoría
+PRINT '5. Ventas por Categoría de Producto:';
+SELECT 
+    p.Categoria,
+    COUNT(DISTINCT f.OrdenID) AS TotalOrdenes,
+    SUM(f.Cantidad) AS UnidadesVendidas,
+    SUM(f.MontoConDescuento) AS TotalVentasNeta
+FROM dbo.FactVentas f
+INNER JOIN dbo.DimProducto p ON f.ProductoKey = p.ProductoKey
+GROUP BY p.Categoria
+ORDER BY TotalVentasNeta DESC;
+GO
