@@ -44,7 +44,7 @@ Un registro en la tabla de hechos `FactVentas` representa **una línea individua
 
 ### 5. Diagrama Dimensional
 El diagrama del modelo en estrella se encuentra disponible en:  
-[Ver Diagrama Modelo Dimensional](docs/modelo-dimensional/Modelo%20dimensional.png)
+[Ver Diagrama Modelo Dimensional](Fase1/docs/modelo-dimensional/Modelo%20dimensional.png)
 
 ---
 
@@ -60,11 +60,14 @@ El proceso de extracción, transformación y carga se implementó mediante **SQL
 ---
 
 ## Estructura del Repositorio
-- `database/`: Script DDL de creación del Data Warehouse (`01_Create_KentFoods_DW.sql`), script de pruebas y validación (`02_Verificaciones_DW.sql`), y archivo de copia de seguridad (`KentFoods_DW.bak`).
+**Fase 1**
+- `database/`: Script DDL de creación del Data Warehouse (`ddl-creacion-modelo-dimensional.sql`), script de pruebas y validación (`query-de-verificacion.sql`), y archivo de copia de seguridad (`kentfoods-dw.bak`).
 - `docs/`: Documentación del modelo dimensional e imágenes.
-- `etl/`: Solución de Visual Studio / SSIS con los paquetes ETL (`.dtsx`).
-- `olap/`: Proyecto de Analysis Services (SSAS) - *Fase 2*.
-- `powerbi/`: Reporte y Dashboard en Power BI (`.pbix`) - *Fase 3*.
+- `etl/`: Solución de Visual Studio / SSIS con los paquetes ETL (`.dtsx`).  
+
+**Fase 2**
+- `olap/`: Proyecto de Analysis Services (SSAS).
+- `powerbi/`: Reporte y Dashboard en Power BI (`.pbix`).
 
 ---
 
@@ -73,12 +76,12 @@ El proceso de extracción, transformación y carga se implementó mediante **SQL
 ### Opción A: Restauración directa desde Backup (.bak)
 1. Abrir **SQL Server Management Studio (SSMS)**.
 2. Hacer clic derecho en **Databases** $\rightarrow$ **Restore Database...**
-3. Seleccionar **Device** y examinar hasta el archivo `database/KentFoods_DW.bak`.
+3. Seleccionar **Device** y examinar hasta el archivo `Fase1/database/backup/kentfoods-dw.bak`.
 4. Ejecutar la restauración para obtener el Data Warehouse con la estructura y los 2,155 registros cargados.
 
 ### Opción B: Reconstrucción mediante Scripts y SSIS
-1. Ejecutar el script `database/01_Create_KentFoods_DW.sql` en SQL Server para crear la base de datos `KentFoods_DW` vacía.
-2. Abrir la solución SSIS situada en `etl/ETL_KentFoods.slnx` con Visual Studio.
+1. Ejecutar el script `Fase1/database/scripts/ddl-creacion-modelo-dimensional.sql` en SQL Server para crear la base de datos `KentFoods_DW` vacía.
+2. Abrir la solución SSIS situada en `Fase1/etl/kentfoods-etl/etl_kentfoods.slnx` con Visual Studio.
 3. Configurar las cadenas de conexión OLE DB hacia la base origen `KentFoods` y destino `KentFoods_DW`.
 4. Ejecutar los 6 paquetes ETL en orden numérico (`01_DimCliente.dtsx` a `06_FactVentas.dtsx`).
-5. Ejecutar el script `database/02_Verificaciones_DW.sql` para comprobar la integridad referencial y las consultas analíticas.
+5. Ejecutar el script `Fase1/database/scripts/query-de-verificacion.sql` para comprobar la integridad referencial y las consultas analíticas.
