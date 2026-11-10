@@ -6,12 +6,52 @@
     <Name>kentfoods-ssas.database</Name>
     <FullPath>kentfoods-ssas.database</FullPath>
   </Database>
+  <Cubes>
+    <ProjectItem>
+      <Name>Kent Foods DW.cube</Name>
+      <FullPath>Kent Foods DW.cube</FullPath>
+      <Dependencies>
+        <ProjectItem>
+          <Name>Kent Foods DW.partitions</Name>
+          <FullPath>Kent Foods DW.partitions</FullPath>
+        </ProjectItem>
+      </Dependencies>
+    </ProjectItem>
+  </Cubes>
+  <Dimensions>
+    <ProjectItem>
+      <Name>Dim Tiempo.dim</Name>
+      <FullPath>Dim Tiempo.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Dim Cliente.dim</Name>
+      <FullPath>Dim Cliente.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Dim Transportista.dim</Name>
+      <FullPath>Dim Transportista.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Dim Empleado.dim</Name>
+      <FullPath>Dim Empleado.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Dim Producto.dim</Name>
+      <FullPath>Dim Producto.dim</FullPath>
+    </ProjectItem>
+  </Dimensions>
   <DataSources>
     <ProjectItem>
       <Name>Kent Foods DW.ds</Name>
       <FullPath>Kent Foods DW.ds</FullPath>
     </ProjectItem>
   </DataSources>
+  <DataSourceViews>
+    <ProjectItem>
+      <Name>Kent Foods DW.dsv</Name>
+      <FullPath>Kent Foods DW.dsv</FullPath>
+    </ProjectItem>
+  </DataSourceViews>
   <Configurations>
     <Configuration>
       <Name>Development</Name>
