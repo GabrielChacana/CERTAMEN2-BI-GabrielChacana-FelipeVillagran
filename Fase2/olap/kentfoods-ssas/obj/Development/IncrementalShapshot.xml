@@ -19,21 +19,21 @@
     <ObjectSnapshots>
       <ObjectSnapshot>
         <Type>Microsoft.AnalysisServices.RelationalDataSource</Type>
-        <TimeStamp>i9YyZZnrhNpfbfqvNIcjrS/gZ3I=09-11-2026 20:47:0109-11-2026 20:47:01</TimeStamp>
+        <TimeStamp>Urn4XGmNuq0NQYdz4NQcipoHaFc=11-11-2026 0:59:0009-11-2026 20:47:01</TimeStamp>
         <ID>
           <String>Kent Foods DW</String>
         </ID>
       </ObjectSnapshot>
       <ObjectSnapshot>
         <Type>Microsoft.AnalysisServices.DataSourceView</Type>
-        <TimeStamp>Pfyx5K1l08PPWpJtTunt0g9JF9A=10-11-2026 4:46:3810-11-2026 4:46:38</TimeStamp>
+        <TimeStamp>Pfyx5K1l08PPWpJtTunt0g9JF9A=11-11-2026 0:59:0110-11-2026 4:46:38</TimeStamp>
         <ID>
           <String>Kent Foods DW</String>
         </ID>
       </ObjectSnapshot>
       <ObjectSnapshot>
         <Type>Microsoft.AnalysisServices.Dimension</Type>
-        <TimeStamp>0yrsCoQPnf/78f/zEZ9octNfG1g=10-11-2026 23:01:3810-11-2026 5:31:52</TimeStamp>
+        <TimeStamp>ljMLPq8hTFJXmK2hUF/4FjhPBJE=11-11-2026 1:15:1810-11-2026 5:31:52</TimeStamp>
         <ID>
           <String>Dim Tiempo</String>
         </ID>
@@ -68,7 +68,7 @@
       </ObjectSnapshot>
       <ObjectSnapshot>
         <Type>Microsoft.AnalysisServices.Cube</Type>
-        <TimeStamp>HNUNh87R/88bRo5PiWr2tSUPSfI=11-11-2026 0:08:3610-11-2026 5:31:52xSnNCy5HV+OHlvfU4Dgosho/eIg=10-11-2026 6:21:0810-11-2026 5:31:52</TimeStamp>
+        <TimeStamp>N0XyoQ8WbtoVZogBlqXHwXDcg40=11-11-2026 1:18:5710-11-2026 5:31:52xSnNCy5HV+OHlvfU4Dgosho/eIg=10-11-2026 6:21:0810-11-2026 5:31:52</TimeStamp>
         <ID>
           <String>Kent Foods DW</String>
         </ID>
@@ -85,5 +85,5 @@
   </Snapshot>
   <AssemblyLocations />
   <ProcessingComplete>true</ProcessingComplete>
-  <LastDeployed>2026-11-11T03:08:36.99Z</LastDeployed>
+  <LastDeployed>2026-11-11T04:19:06.29Z</LastDeployed>
 </DeploymentSnapshot>
