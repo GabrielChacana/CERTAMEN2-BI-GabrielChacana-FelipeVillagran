@@ -8,7 +8,7 @@
       <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramLayout</Name>
       <Value>
         <dds xmlns="">
-          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="26" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="-14527" scrolltop="1059" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="75" x="34264" y="16616" backcolor="2434342" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="1" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
+          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="26" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="-14527" scrolltop="1059" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="75" x="34264" y="14631" backcolor="2434342" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="1" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
             <font>
               <ddsxmlobjectstreamwrapper binary="01000000900144420100065461686f6d61" />
             </font>
@@ -277,37 +277,6 @@
         </Hierarchy>
       </Hierarchies>
     </Dimension>
-    <Dimension dwd:design-time-name="e9d28f05-4364-4a05-b5b9-80dadd2cd619">
-      <ID>Dim Cliente</ID>
-      <Name>Dim Cliente</Name>
-      <DimensionID>Dim Cliente</DimensionID>
-      <Attributes>
-        <Attribute dwd:design-time-name="098f404d-c155-4d0d-94f5-544da83f5bea">
-          <AttributeID>Cliente Key</AttributeID>
-          <AttributeHierarchyEnabled>false</AttributeHierarchyEnabled>
-        </Attribute>
-        <Attribute dwd:design-time-name="de7090fa-47ff-4f6b-b907-874016ed56c6">
-          <AttributeID>Ciudad</AttributeID>
-        </Attribute>
-        <Attribute dwd:design-time-name="8b178994-b1ce-4840-a9fe-3eb1c4e414e2">
-          <AttributeID>Cargo</AttributeID>
-        </Attribute>
-        <Attribute dwd:design-time-name="90db28ab-3191-4d6c-a30f-17c50a77913c">
-          <AttributeID>Contacto</AttributeID>
-        </Attribute>
-        <Attribute dwd:design-time-name="9b110266-6e50-47db-a9d5-89c42c75d7eb">
-          <AttributeID>Empresa</AttributeID>
-        </Attribute>
-        <Attribute dwd:design-time-name="b91b4477-cebd-4285-8214-a665a8f27fc6">
-          <AttributeID>Pais</AttributeID>
-        </Attribute>
-      </Attributes>
-      <Hierarchies>
-        <Hierarchy dwd:design-time-name="993a6841-d59d-4613-b74c-a46f7895ab28">
-          <HierarchyID>Jerarquía</HierarchyID>
-        </Hierarchy>
-      </Hierarchies>
-    </Dimension>
     <Dimension dwd:design-time-name="f0f03955-ec45-4a6c-a034-2d1317e1f8c6">
       <ID>Dim Transportista</ID>
       <Name>Dim Transportista</Name>
@@ -414,6 +383,36 @@
         </Hierarchy>
       </Hierarchies>
     </Dimension>
+    <Dimension dwd:design-time-name="b59b86f0-0d8f-4ef0-b184-3db1e17bcd7e">
+      <ID>Dim Cliente</ID>
+      <Name>Dim Cliente</Name>
+      <DimensionID>Dim Cliente</DimensionID>
+      <Attributes>
+        <Attribute dwd:design-time-name="d114a279-559e-410d-8953-ca4e4b28feff">
+          <AttributeID>Cliente Key</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="1b069f86-b7c2-43d1-91a4-8c685e310ce0">
+          <AttributeID>Ciudad</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="0aff9b9d-d94f-4898-9e7c-fd66915c5b71">
+          <AttributeID>Cargo</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="d3e37cfe-98a8-493c-8cc7-fe888c26d096">
+          <AttributeID>Contacto</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="07834f0a-3014-4dac-9844-4602752cb63b">
+          <AttributeID>Empresa</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="d73bf960-f9e6-4164-98b1-928be4e712d7">
+          <AttributeID>Pais</AttributeID>
+        </Attribute>
+      </Attributes>
+      <Hierarchies>
+        <Hierarchy dwd:design-time-name="f6e5c40f-c298-4d9f-aab8-18f237cecf08">
+          <HierarchyID>Jerarquía</HierarchyID>
+        </Hierarchy>
+      </Hierarchies>
+    </Dimension>
   </Dimensions>
   <MeasureGroups>
     <MeasureGroup dwd:design-time-name="b90785b3-2cd7-4199-98d2-9c9615d4f0ad">
@@ -502,24 +501,6 @@
             </Attribute>
           </Attributes>
         </Dimension>
-        <Dimension xsi:type="RegularMeasureGroupDimension" dwd:design-time-name="00c6203d-dd60-489a-8439-f456ce33f1c8">
-          <CubeDimensionID>Dim Cliente</CubeDimensionID>
-          <Attributes>
-            <Attribute dwd:design-time-name="ed1df533-be72-43ff-9663-c5f859eedacc">
-              <AttributeID>Cliente Key</AttributeID>
-              <KeyColumns>
-                <KeyColumn dwd:design-time-name="2b1dfdc0-a2a2-4ba3-9e0c-73bcef8fe5ad">
-                  <DataType>Integer</DataType>
-                  <Source xsi:type="ColumnBinding" dwd:design-time-name="1d565b25-c919-4ef7-b33a-a24e54bb5e9d">
-                    <TableID>dbo_FactVentas</TableID>
-                    <ColumnID>ClienteKey</ColumnID>
-                  </Source>
-                </KeyColumn>
-              </KeyColumns>
-              <Type>Granularity</Type>
-            </Attribute>
-          </Attributes>
-        </Dimension>
         <Dimension xsi:type="RegularMeasureGroupDimension" dwd:design-time-name="84e80ec6-7003-4d07-978a-7596be2ff375">
           <CubeDimensionID>Dim Transportista</CubeDimensionID>
           <Attributes>
@@ -586,6 +567,24 @@
                   <Source xsi:type="ColumnBinding" dwd:design-time-name="9dc0f45e-074d-4bdc-9009-9821261fd8f4">
                     <TableID>dbo_FactVentas</TableID>
                     <ColumnID>ProductoKey</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <Type>Granularity</Type>
+            </Attribute>
+          </Attributes>
+        </Dimension>
+        <Dimension xsi:type="RegularMeasureGroupDimension" dwd:design-time-name="c8810072-8b3e-4015-9934-b7754654af16">
+          <CubeDimensionID>Dim Cliente</CubeDimensionID>
+          <Attributes>
+            <Attribute dwd:design-time-name="b0cbb231-703f-4b0a-9cd9-046a340afee8">
+              <AttributeID>Cliente Key</AttributeID>
+              <KeyColumns>
+                <KeyColumn dwd:design-time-name="46afae2e-111c-42f7-848d-ec4a8950cd3d">
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding" dwd:design-time-name="da15cb13-4a0e-426e-9670-a3677c595463">
+                    <TableID>dbo_FactVentas</TableID>
+                    <ColumnID>ClienteKey</ColumnID>
                   </Source>
                 </KeyColumn>
               </KeyColumns>
