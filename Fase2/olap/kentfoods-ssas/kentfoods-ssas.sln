@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.37627.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D2ABAB84-BF74-430A-B69E-9DC6D40DDA17}") = "kentfoods-ssas", "kentfoods-ssas.dwproj", "{E044EFB6-6CAD-4597-BFEA-D9C765302738}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E044EFB6-6CAD-4597-BFEA-D9C765302738}.Development|Default.ActiveCfg = Development
+		{E044EFB6-6CAD-4597-BFEA-D9C765302738}.Development|Default.Build.0 = Development
+		{E044EFB6-6CAD-4597-BFEA-D9C765302738}.Development|Default.Deploy.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7B82AB66-3A03-47BD-AC5B-C4EA15949107}
+	EndGlobalSection
+EndGlobal
