@@ -59,16 +59,46 @@ El proceso de extracción, transformación y carga se implementó mediante **SQL
 
 ---
 
+## Cubo OLAP - Fase 2
+El modelo multidimensional fue construido e implementado en **SQL Server Analysis Services (SSAS)** bajo el proyecto `kentfoods-ssas` (`Kent Foods DW.cube`), permitiendo el análisis *drill-down* y *roll-up* sobre el Data Warehouse:
+
+- **Grupo de Medida (`Fact Ventas`):**
+  - Medidas base: `Monto Con Descuento`, `Monto Venta`, `Cantidad`, `Dias De Envio` y `Recuento Fact Ventas`.
+  - Medida calculada (Script MDX): `Promedio Dias Envio`, configurada para evaluar con precisión el tiempo medio logístico por transacción.
+- **Dimensiones y Jerarquías Multidimensionales:**
+  - **`Dim Cliente`:** Incluye la jerarquía geográfica `Ubicacion Cliente` (`Pais` $\rightarrow$ `Ciudad` $\rightarrow$ `Empresa`).
+  - **`Dim Producto`:** Jerarquía de catálogo (`Categoria` $\rightarrow$ `Producto`) para analizar la rotación de inventario.
+  - **`Dim Tiempo` (*Role-Playing Dimension*):** Vinculada doblemente a la tabla de hechos como **`Fecha Orden`** y **`Fecha Envio`**. Se configuraron claves compuestas (`KeyColumns` y `NameColumn`) en la jerarquía temporal (`Anio` $\rightarrow$ `Semestre` $\rightarrow$ `Trimestre` $\rightarrow$ `Mes` $\rightarrow$ `Dia`) para garantizar la unicidad de los períodos entre distintos años.
+  - **`Dim Empleado` y `Dim Transportista`:** Configuradas con sus atributos descriptivos y geográficos para el desglose de desempeño comercial y logístico.
+
+---
+
+## Dashboard Power BI - Fase 2
+El reporte ejecutivo fue diseñado en **Power BI Desktop** utilizando el modo de conectividad **Conectar en directo (*Live Connection*)** directamente contra el cubo OLAP de SSAS, garantizando que todas las agregaciones y jerarquías provengan del motor multidimensional:
+
+1. **Tarjetas de Resumen Ejecutivo (KPIs):**
+   - **Ingresos Netos (`Monto Con Descuento`):** $1,266 mill. acumulados.
+   - **Volumen de Unidades (`Cantidad`):** 51,317 mil productos vendidos.
+   - **Eficiencia Logística (`Promedio Dias Envio`):** 8,06 días promedio de despacho global.
+2. **Visualizaciones Analíticas:**
+   - **Ventas Netas a lo largo del Tiempo:** Gráfico de líneas que muestra la evolución histórica mensual y anual de los ingresos con descuento.
+   - **Volumen de Ventas por Categoría y Producto:** Gráfico de barras horizontales con soporte de jerarquía para identificar los productos con mayor rotación de inventario.
+   - **Eficiencia de Entrega por Empresa de Transporte:** Gráfico de columnas que compara el promedio de días de envío entre los transportistas (*United Package*, *Speedy Express* y *Federal Shipping*).
+3. **Segmentadores Interactivos (*Slicers*):**
+   - Filtros dinámicos superiores por **Año (`Anio`)** y **País (`Pais`)** que recalculan en tiempo real todas las métricas del lienzo.
+
+---
+
 ## Estructura del Repositorio
 **Fase 1**
-- `database/`: Script DDL de creación del Data Warehouse (`ddl-creacion-modelo-dimensional.sql`), script de pruebas y validación (`query-de-verificacion.sql`), y archivo de copia de seguridad (`kentfoods-dw.bak`).
+- `database/`: Script DDL de creación del Data Warehouse (`ddl-creacion-modelo-dimensional.sql`), script de pruebas y validación (`query-de-verificacion.sql`), y archivo de copia de seguridad (`KentFoods_DW.bak`).
 - `docs/`: Documentación del modelo dimensional e imágenes.
 - `etl/`: Solución de Visual Studio / SSIS con los paquetes ETL (`.dtsx`).  
 
 **Fase 2**
 - `olap/`: Proyecto de Analysis Services (SSAS).
 - `powerbi/`: Reporte y Dashboard en Power BI (`.pbix`).
-
+- `database/`: Script de creación (`script.sql`) y archivo de copia de seguridad (`KentFoods_DW.bak`).
 ---
 
 ## Instrucciones de Ejecución y Revisión
@@ -76,7 +106,7 @@ El proceso de extracción, transformación y carga se implementó mediante **SQL
 ### Opción A: Restauración directa desde Backup (.bak)
 1. Abrir **SQL Server Management Studio (SSMS)**.
 2. Hacer clic derecho en **Databases** $\rightarrow$ **Restore Database...**
-3. Seleccionar **Device** y examinar hasta el archivo `Fase1/database/backup/kentfoods-dw.bak`.
+3. Seleccionar **Device** y examinar hasta el archivo `Fase1/database/backup/KentFoods_DW.bak`.
 4. Ejecutar la restauración para obtener el Data Warehouse con la estructura y los 2,155 registros cargados.
 
 ### Opción B: Reconstrucción mediante Scripts y SSIS
@@ -85,3 +115,13 @@ El proceso de extracción, transformación y carga se implementó mediante **SQL
 3. Configurar las cadenas de conexión OLE DB hacia la base origen `KentFoods` y destino `KentFoods_DW`.
 4. Ejecutar los 6 paquetes ETL en orden numérico (`01_DimCliente.dtsx` a `06_FactVentas.dtsx`).
 5. Ejecutar el script `Fase1/database/scripts/query-de-verificacion.sql` para comprobar la integridad referencial y las consultas analíticas.
+
+### Fase 2: Despliegue del Cubo OLAP y Dashboard Power BI
+1. **Procesar el Cubo SSAS:**
+   - Abrir la solución ubicada en `olap/` con Visual Studio.
+   - En el Explorador de soluciones, abrir `Orígenes de datos` $\rightarrow$ **`Kent Foods DW.ds`**.
+   - Ajustar el nombre del servidor SQL local y, en la pestaña **Información de suplantación (Impersonation Information)**, configurar las credenciales locales de Windows o asegurarse de que el usuario `NT SERVICE\MSSQLServerOLAPService` posea permisos `db_datareader` sobre `KentFoods_DW`.
+   - Hacer clic derecho sobre el proyecto `kentfoods-ssas` $\rightarrow$ **Procesar... (Process)** $\rightarrow$ **Ejecutar (Run)**.
+2. **Visualizar el Dashboard en Power BI:**
+   - Abrir el archivo `.pbix` ubicado en la carpeta `powerbi/` utilizando **Power BI Desktop**.
+   - En caso de solicitar ajuste de origen, ir a `Transformar datos` $\rightarrow$ `Configuración de origen de datos` y apuntar la conexión de **Analysis Services** hacia el servidor `localhost` en modo **Conectar en directo (*Live Connection*)**.
